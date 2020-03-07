@@ -1,0 +1,18 @@
+.tooltip {
+  background: rgba(0, 0, 0, 0.75);
+  border: 0;
+  border-radius: 4px;
+  padding: 6px 8px;
+  pointer-events: none;
+  position: absolute;
+  text-align: center;
+  z-index: 100;
+  color: var(--color-white);
+}
+.barchart :global(.bar) {
+  fill: var(--color-green);
+}
+
+.barchart :global(.bar:hover) {
+  fill: var(--color-green-lighter);
+}
