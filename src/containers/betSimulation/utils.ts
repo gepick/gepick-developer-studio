@@ -50,7 +50,7 @@ export const findDayPicks = (picksByYearsMonthsDays: PicksByYearsMonthsDays[], d
   const picksByMonth = picksOfYear?.picks.find((monthPicks) => parseInt(monthPicks.month) === day.month)
   const picksByDay = picksByMonth?.picks.find((dayPicks) => parseInt(dayPicks.day) === day.day)
 
-  return picksByDay?.picks
+  return picksByDay?.picks ?? []
 }
 
 export function formatPicksByYearsMonthsDays(picks: PickWithMatch[]): PicksByYearsMonthsDays[] {

@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
+// @ts-nocheck
+import React, { useEffect, useRef } from 'react'
 import * as d3 from 'd3'
 
 const colors = d3.scaleOrdinal(d3.schemeCategory10)
@@ -51,8 +52,6 @@ const Bar = (props) => {
       value: d.y,
     }
   })
-
-  console.log(data)
 
   const x = d3
     .scaleBand()

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Match } from '~/utils/types'
 import formatMatch from '~/utils/formatMatch'
-import Container from '~/components/Container/Container'
+import Container from '~/components/container/Container'
 
 interface Props {
   match: Match

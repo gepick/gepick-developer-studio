@@ -1,7 +1,7 @@
 import React from 'react'
 import moment, { Moment } from 'moment'
 import { groupBy, map } from 'lodash'
-import Container from '~/components/Container/Container'
+import Container from '~/components/container/Container'
 import { Switch, Slider, Row, Col, Tag, DatePicker } from 'antd'
 import useSwitch from '~/hooks/useSwitch'
 import { PickEnd, TimeInterval } from '~/utils/types'
@@ -15,6 +15,11 @@ import { RangePickerValue } from 'antd/lib/date-picker/interface'
 
 const { CheckableTag } = Tag
 
+interface OddsInterval {
+  from: number
+  to: number
+}
+
 export interface AutobettingSettings {
   leagueId: string
   onlyValue: boolean
@@ -22,6 +27,7 @@ export interface AutobettingSettings {
   ends: PickEnd[]
   oddIndex: number
   timeInterval: TimeInterval
+  oddsInterval: OddsInterval
 }
 
 interface Props {
@@ -32,6 +38,7 @@ interface Props {
   oddIndex?: number
   ends?: PickEnd[]
   timeInterval: TimeInterval
+  oddsInterval?: OddsInterval
   onChange: (settings: AutobettingSettings) => void
 }
 
@@ -44,6 +51,7 @@ const Settings: React.FunctionComponent<Props> = (props) => {
   const [ends, setEnds] = React.useState<PickEnd[]>(props.ends ?? [])
   const [oddIndex, setOddIndex] = React.useState<number>(props.oddIndex ?? 0)
   const [timeInterval, setTimeInterval] = React.useState<TimeInterval>(props.timeInterval)
+  const [oddsInterval, setOddsInterval] = React.useState<OddsInterval>(props.oddsInterval ?? { from: 1, to: 10 })
 
   React.useEffect(() => {
     props.onChange({
@@ -53,8 +61,9 @@ const Settings: React.FunctionComponent<Props> = (props) => {
       leagueId,
       oddIndex,
       timeInterval,
+      oddsInterval,
     })
-  }, [onlyValue, leagueId, minProbability, ends, oddIndex, timeInterval])
+  }, [onlyValue, leagueId, minProbability, ends, oddIndex, timeInterval, oddsInterval])
 
   const selectAllEnds = () => {
     setEnds(POSIBLE_PICKS)
@@ -103,6 +112,10 @@ const Settings: React.FunctionComponent<Props> = (props) => {
     ]
   }, [props.timeInterval])
 
+  const handleOddsIntervalChange = (value: number[]) => {
+    setOddsInterval({ from: value[0], to: value[1] })
+  }
+
   const righBlockComponent = (
     <>
       <Row gutter={5}>
@@ -127,6 +140,19 @@ const Settings: React.FunctionComponent<Props> = (props) => {
         </Col>
         <Col span={5} style={{ lineHeight: '36px' }}>
           <Switch defaultChecked={onlyValue} onChange={switchOnlyValue} />
+        </Col>
+      </Row>
+      <Row>
+        <Col>Odds interval:</Col>
+        <Col>
+          <Slider
+            range
+            onChange={handleOddsIntervalChange as any}
+            defaultValue={[oddsInterval.from, oddsInterval.to]}
+            min={1}
+            step={0.1}
+            max={10}
+          />
         </Col>
       </Row>
       <Row>

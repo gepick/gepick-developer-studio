@@ -17,6 +17,7 @@
     "noUnusedLocals": true,
     "lib": ["es6", "es7", "dom"],
     "baseUrl": ".",
+    "typeRoots": ["node_modules/@types", "declaration.d"],
     "paths": {
       "~*": ["./src/*"]
     }

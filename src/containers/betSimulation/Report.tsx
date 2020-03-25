@@ -3,8 +3,8 @@ import { Row, Col, Card } from 'antd'
 import { ReportData } from '~/utils/types'
 
 interface Props {
-	reportData: ReportData
-	title: string
+  reportData: ReportData
+  title: string
 }
 
 const Report: React.FunctionComponent<Props> = (props) => {
@@ -24,7 +24,7 @@ const Report: React.FunctionComponent<Props> = (props) => {
   ]
 
   return (
-          <Card title={props.title}>
+    <Card title={props.title}>
       {data.map((reportItem, key) => {
         return (
           <Row key={key}>
@@ -33,7 +33,7 @@ const Report: React.FunctionComponent<Props> = (props) => {
           </Row>
         )
       })}
-          </Card>
+    </Card>
   )
 }
 

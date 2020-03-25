@@ -1,6 +1,6 @@
 import React from 'react'
 import { Table } from 'antd'
-import { Pick, PickStatus, PickWithMatch } from '~/utils/types'
+import { PickStatus, PickWithMatch } from '~/utils/types'
 import MatchModal from '~/components/matchModal/MatchModal'
 import styles from './styles.css'
 
@@ -8,10 +8,23 @@ interface Props {
   picks: PickWithMatch[]
 }
 
+interface TableItem {
+  match: PickWithMatch['match']
+  pick: PickWithMatch['nicePickEnd']
+  probability: PickWithMatch['probability']
+  odd: PickWithMatch['oddSize']
+  bookmakerProb: PickWithMatch['bookmakerProb']
+  bookmakerName: PickWithMatch['bookmakerName']
+  profit: PickWithMatch['profit']
+  value: PickWithMatch['value']
+  status: PickWithMatch['status']
+  end: PickWithMatch['end']
+}
+
 const PicksTable: React.FunctionComponent<Props> = (props) => {
   const [modalMatchId, setModalMatchId] = React.useState<string | undefined>()
 
-  const getColor = (pick: Pick) => {
+  const getColor = (pick: TableItem) => {
     if (pick.status === PickStatus.WIN) {
       return '#c5e1a5'
     }
@@ -23,7 +36,7 @@ const PicksTable: React.FunctionComponent<Props> = (props) => {
     return undefined
   }
 
-  const render = (text: string, pick: Pick) => {
+  const render = (text: string, pick: TableItem) => {
     const color = getColor(pick)
     return {
       props: {
@@ -41,7 +54,7 @@ const PicksTable: React.FunctionComponent<Props> = (props) => {
     setModalMatchId(matchId)
   }, [])
 
-  const renderMatch = (text: string, pick: PickWithMatch) => {
+  const renderMatch = (text: string, pick: TableItem) => {
     const color = getColor(pick)
     const { hteam, ateam, startTime, beLink } = pick.match
 

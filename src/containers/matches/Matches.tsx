@@ -2,18 +2,14 @@ import React from 'react'
 import gql from 'graphql-tag'
 import { sortBy } from 'lodash'
 import { useQuery } from 'react-apollo-hooks'
-import { FilterSettings } from './utils'
 import Layout from '~/containers/Layout'
-import { Select, Row, Col, Button } from 'antd'
-import { Pick, Match, League, MatchWithPicks } from '~/utils/types'
+import { Select, Row, Col } from 'antd'
+import { Match, League } from '~/utils/types'
 import { useHistory, useParams, generatePath } from 'react-router-dom'
 import MatchComponent from './Match'
-import Container from '~/components/Container/Container'
-import PicksTable from './PicksTable'
-import predict from '~/services/predict'
+import Container from '~/components/container/Container'
 import routes from '~/routes'
-import Filter from '~/containers/matches/Filter'
-import PicksReport from '~/containers/matches/PicksReport'
+import MatchModal from '~/components/matchModal/MatchModal'
 
 const matchesQuery = gql`
   query Matches($leagueId: String, $year: Int) {
@@ -75,43 +71,11 @@ const leaguesQuery = gql`
 
 const yearsList = [2020, 2019, 2018, 2017, 2016, 2015]
 
-const filterPicks = (picks: Pick[], filterSettings: FilterSettings) => {
-  const filtered = picks.filter((pick) => {
-    if (filterSettings.onlyValue) {
-      if (!pick.oddSize || !pick.bookmakerProb) {
-        return false
-      }
-
-      if (pick.probability < pick.bookmakerProb) {
-        return false
-      }
-    }
-
-    return true
-  })
-
-  return filtered
-}
-
-const filterMatchesPicks = (matchesWithPicks: MatchWithPicks[], filterSettings: FilterSettings) => {
-  const filtered = matchesWithPicks.map((match) => {
-    return {
-      ...match,
-      picks: filterPicks(match.picks, filterSettings),
-    }
-  })
-
-  return filtered
-}
-
 interface State {
   predicting: boolean
   selectedYear: number
   selectedLeagueValue?: string
   leagueSearchKeyword?: string
-  matchesWithPicks?: MatchWithPicks[]
-  matchesWithFilteredPicks?: MatchWithPicks[]
-  filterSettings: FilterSettings
 }
 
 const Matches = () => {
@@ -122,10 +86,8 @@ const Matches = () => {
     leagueSearchKeyword: undefined,
     predicting: false,
     selectedYear: yearsList[0],
-    filterSettings: {
-      onlyValue: false,
-    },
   })
+  const [matchIdModal, setMatchIdModal] = React.useState<string | undefined>()
 
   const leaguesResults = useQuery(leaguesQuery)
 
@@ -181,34 +143,15 @@ const Matches = () => {
   }
 
   const handleMatchClick = (match: Match) => {
-    history.push(generatePath(routes.match, { matchId: match._id }))
+    setMatchIdModal(match._id)
   }
 
-  const handlePredictAll = async () => {
-    setState({
-      ...state,
-      predicting: true,
-    })
-    const matchesWithPicks = await predict(matches, {})
-    setState({
-      ...state,
-      matchesWithPicks,
-      matchesWithFilteredPicks: filterMatchesPicks(matchesWithPicks, state.filterSettings),
-      predicting: false,
-    })
-  }
-
-  const handleUpdateByFIlter = (filterSettings: FilterSettings) => {
-    setState({
-      ...state,
-      filterSettings,
-      matchesWithFilteredPicks: filterMatchesPicks(state.matchesWithPicks ?? [], filterSettings),
-    })
+  const handleMatchModalClose = () => {
+    setMatchIdModal(undefined)
   }
 
   return (
     <Layout loading={matchesResults.loading}>
-      <Filter initSettings={state.filterSettings} onUpdate={handleUpdateByFIlter} />
       <Row>
         <Col span={12}>
           <Select
@@ -240,23 +183,12 @@ const Matches = () => {
           </Select>
         </Col>
       </Row>
-      <Container>
-        <Button loading={state.predicting} onClick={handlePredictAll}>
-          Predict all
-        </Button>
-      </Container>
       <Container fullWidth>
-        {!state.matchesWithFilteredPicks &&
-          matches.map((match) => <MatchComponent onClick={handleMatchClick} match={match} />)}
-        {state.matchesWithFilteredPicks &&
-          state.matchesWithFilteredPicks.map((matchWithPicks) => (
-            <>
-              <MatchComponent onClick={handleMatchClick} match={matchWithPicks} />
-              <PicksTable picks={matchWithPicks.picks} />
-              <PicksReport picks={matchWithPicks.picks} />
-            </>
-          ))}
+        {matches.map((match) => (
+          <MatchComponent onClick={handleMatchClick} match={match} />
+        ))}
       </Container>
+      {matchIdModal && <MatchModal onClose={handleMatchModalClose} matchId={matchIdModal} />}
     </Layout>
   )
 }

@@ -4,7 +4,7 @@ import { Row, Col, DatePicker, Divider, Tabs, Card, Button } from 'antd'
 import Layout from '~/containers/Layout'
 import Settings, { AutobettingSettings } from '~/components/settings/Settings'
 import { PickWithMatch, Day } from '~/utils/types'
-import PicksTable from '~/components/picksTable/picksTable'
+import PicksTable from '~/components/picksTable/PicksTable'
 import Report from '~/containers/betSimulation/Report'
 import fixDate from '~/utils/fixDate'
 import ResponsiveBarChart from '~/components/charts/barchart/ResponsiveBarchart'
@@ -17,6 +17,7 @@ import useReportData from '~/containers/betSimulation/useReportData'
 import Match from '~/components/match/Match'
 import config from '~/config'
 import useUrlParams from '~/hooks/useUrlParams'
+import BettingSimulationTab from './BettingSimulationTab'
 
 interface Props {}
 
@@ -42,6 +43,7 @@ const defaultSettings: AutobettingSettings = {
   ends: POSIBLE_PICKS,
   oddIndex: 0,
   timeInterval: defaultTimeInterval,
+  oddsInterval: { from: 1, to: 10 },
 }
 
 const BetSimulation: React.FunctionComponent<Props> = (props) => {
@@ -169,16 +171,22 @@ const BetSimulation: React.FunctionComponent<Props> = (props) => {
         </Col>
       </Row>
       <Tabs animated={false}>
-        <Tabs.TabPane tab="Picks" key="1">
+        <Tabs.TabPane tab={`Day Picks (${reports?.dayPicks.length ?? 0})`} key="1">
           <PicksTable picks={reports?.dayPicks ?? []} />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Stats" key="2">
+        <Tabs.TabPane tab={`All picks (${reports?.allPicks.length ?? 0})`} key="2">
+          <PicksTable picks={reports?.allPicks ?? []} />
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Stats" key="3">
           {reportsComponent}
         </Tabs.TabPane>
-        <Tabs.TabPane tab={`Matches (${matches.length})`} key="3">
+        <Tabs.TabPane tab={`Matches (${matches.length})`} key="4">
           {matches.map((match) => {
             return <Match match={match} />
           })}
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Beting simulation" key="5">
+          <BettingSimulationTab picks={reports?.allPicks ?? []} />
         </Tabs.TabPane>
       </Tabs>
     </Layout>

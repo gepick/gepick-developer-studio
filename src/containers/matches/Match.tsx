@@ -1,7 +1,7 @@
 import React from 'react'
 import { Match } from '~/utils/types'
 import formatMatch from '~/utils/formatMatch'
-import Container from '~/components/Container/Container'
+import Container from '~/components/container/Container'
 
 interface Props {
   match: Match
@@ -9,7 +9,7 @@ interface Props {
 }
 
 const Match: React.FunctionComponent<Props> = (props) => {
-  const { startTime, hteam, ateam, result, beLink, _id } = formatMatch(props.match)
+  const { startTime, hteam, ateam, result, beLink } = formatMatch(props.match)
   const res = result?.fullTime
 
   const resComponent = res && (
@@ -22,17 +22,24 @@ const Match: React.FunctionComponent<Props> = (props) => {
       props.onClick(props.match)
     }
   }, [props.onClick, props.match])
+
+  const handleExplore = () => {
+    if (props.onClick) {
+      props.onClick(props.match)
+    }
+  }
+
   return (
     <Container>
       <span onClick={handleOnMatchClick}>
         {startTime} {hteam.name} - {ateam.name} {resComponent}
       </span>
+      <Container inline width={5} />
       <a href={'https://betexplorer.com' + beLink} target="_blank">
         source
       </a>
-      <a href={'/matches/match/' + _id} target="_blank">
-        new tab
-      </a>
+      <Container inline width={5} />
+      <a onClick={handleExplore}>explore</a>
     </Container>
   )
 }

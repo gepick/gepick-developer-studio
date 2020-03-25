@@ -11,9 +11,12 @@
     "build:modelpush": "webpack --config webpack.modelpush.config.js"
   },
   "devDependencies": {
+    "@types/archiver": "^3.1.0",
     "@types/classnames": "^2.2.9",
     "@types/history": "^4.7.3",
+    "@types/inquirer": "^6.5.0",
     "@types/lodash": "^4.14.149",
+    "@types/node": "^13.9.2",
     "@types/react-dom": "^16.9.4",
     "@types/react-router": "^5.1.3",
     "awesome-typescript-loader": "^5.2.1",
@@ -43,17 +46,20 @@
     "@types/react-router-dom": "^5.1.3",
     "antd": "^3.26.6",
     "apollo-boost": "^0.4.7",
+    "archiver": "^3.1.1",
     "axios": "^0.19.2",
     "classnames": "^2.2.6",
     "d3": "^5.15.0",
+    "form-data": "^3.0.0",
     "graphql": "^14.5.8",
     "graphql-tag": "^2.10.1",
+    "inquirer": "^7.1.0",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
-    "prompt": "^1.0.0",
     "react-apollo-hooks": "^0.5.0",
     "react-hooks-global-state": "^0.16.0",
     "react-router": "^5.1.2",
-    "react-router-dom": "^5.1.2"
+    "react-router-dom": "^5.1.2",
+    "stdio": "^2.1.1"
   }
 }

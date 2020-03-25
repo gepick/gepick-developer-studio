@@ -1,13 +1,12 @@
 import React from 'react'
 import { Link, generatePath } from 'react-router-dom'
 import routes from '~/routes'
+import { Layout, Menu } from 'antd'
+import Container from '~/components/container/Container'
 
 interface Props {
   loading?: boolean
 }
-
-import { Layout, Menu } from 'antd'
-import Container from '~/components/Container/Container'
 
 const { Header, Content, Sider } = Layout
 

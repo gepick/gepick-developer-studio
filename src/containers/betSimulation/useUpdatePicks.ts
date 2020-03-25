@@ -18,6 +18,7 @@ function useUpdatePicks(): Response {
     setIsUpdating(true)
     const options = {
       ends: settings.ends,
+      oddsInterval: settings.oddsInterval,
       oddIndex: settings.oddIndex,
     }
 
@@ -34,9 +35,13 @@ function useUpdatePicks(): Response {
         return false
       }
 
-      if(!find(settings.ends, pick.end)) {
+      if (!find(settings.ends, pick.end)) {
         return false
-      } 
+      }
+
+      if (pick.oddSize < settings.oddsInterval.from || pick.oddSize > settings.oddsInterval.to) {
+        return false
+      }
 
       return true
     }
