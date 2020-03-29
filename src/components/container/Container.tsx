@@ -22,6 +22,7 @@ interface IProps {
   marginTop?: number
   margin?: number
   marginBottom?: number
+  marginLeft?: number
   marginRight?: number
   bottom?: number
   minWidth?: number
@@ -69,6 +70,7 @@ const Container: React.FunctionComponent<IProps> = (props: IProps): JSX.Element 
         lineHeight: props.lineHeight ? `${props.lineHeight}px` : undefined,
         margin: props.margin,
         marginBottom: props.marginBottom,
+        marginLeft: props.marginLeft,
         marginRight: props.marginRight,
         marginTop: props.marginTop,
         maxHeight: props.maxHeight,

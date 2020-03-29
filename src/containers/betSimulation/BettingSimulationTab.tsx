@@ -151,11 +151,13 @@ const Tab: React.FunctionComponent<Props> = (props) => {
           <Radio value={MONEY_STRATEGY.DAGON}>Dagon</Radio>
         </Radio.Group>
         max step:
+        <Container marginLeft={5} marginRight={5} inline={true}>
         <Select value={dagonSettings.maxStep} showArrow filterOption={false} onChange={handleDagonMaxStepChange}>
           {[...Array(20).keys()].map((value) => (
             <Select.Option key={value}>{value}</Select.Option>
           ))}
         </Select>
+        </Container>
         growing multiple:
         <InputNumber
           min={0}
